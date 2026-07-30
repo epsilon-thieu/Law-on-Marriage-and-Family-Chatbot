@@ -1,0 +1,49 @@
+documents:
+  - path: "E:\\RAG_chatbot\\data\\raw\\Nghị-định-82-2020-NĐ-CP.docx"
+    source_name: "ND_82_2020"
+    skip_texts: ["Đang theo dõi"]
+    stop_at_patterns: ["PHỤ LỤC\\s+[IVXLCDM]+"]
+
+  - path: "E:\\RAG_chatbot\\data\\raw\\Nghị-định-126-2014-NĐ-CP.docx"
+    source_name: "ND_126_2014"
+    stop_at_patterns: ["PHỤ LỤC\\s+[IVXLCDM]+"]
+
+  - path: "E:\\RAG_chatbot\\data\\raw\\Nghị-định-207-2025-NĐ-CP.docx"
+    source_name: "ND_207_2025"
+    stop_at_patterns: ["PHỤ LỤC\\s+[IVXLCDM]+"]
+
+  - path: "E:\\RAG_chatbot\\data\\raw\\Nghị-quyết-01-2024-NQ-HĐTP.docx"
+    source_name: "NQ_01_2024"
+
+  - path: "E:\\RAG_chatbot\\data\\raw\\Thông-tư-32-2016-TT-BYT.docx"
+    source_name: "TT_32_2016"
+
+  - path: "E:\\RAG_chatbot\\data\\raw\\Thông-tư-34-2017-TT-BYT.docx"
+    source_name: "TT_34_2017"
+
+  - path: "E:\\RAG_chatbot\\data\\raw\\Thông-tư-liên-tịch-01-2016-TTLT-TANDTC-VKSNDTC-BTP.docx"
+    source_name: "TTLT_01_2016"
+
+  - path: "E:\\RAG_chatbot\\data\\raw\\Luat-Hon-Nhan-Va-Gia-Dinh-2014.docx"
+    source_name: "LUAT_HNGD_2014"
+
+  - path: "E:/RAG_chatbot/data/raw/52_2010_QH12_108082.docx"
+    source_name: "LUAT_52/2010/QH12"
+
+  - path: "E:/RAG_chatbot/data/raw/19_2011_ND-CP_120635.docx"
+    source_name: "19/2011/NĐ-CP"
+
+  - path: "E:/RAG_chatbot/data/raw/13_2022_QH15_490095.docx"
+    source_name: "LUAT_13/2022/QH15"
+
+  - path: "E:/RAG_chatbot/data/raw/326_2016_UBTVQH14_337085.docx"
+    source_name: "NQ_326/2016/UBTVQH14"
+
+  - path: "E:/RAG_chatbot/data/raw/92_2015_QH13_296861.docx"
+    source_name: "LUAT_92/2015/QH13"
+
+  - path: "E:/RAG_chatbot/data/raw/91_2015_QH13_m_296215.docx"
+    source_name: "LUAT_91/2015/QH13"
+
+  - path: "E:/RAG_chatbot/data/raw/110_2013_ND-CP_208274.docx"
+    source_name: "ND_110/2013/NĐ-CP"

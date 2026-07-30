@@ -1,0 +1,25 @@
+# Virtual environment
+.venv/
+
+# API keys / secrets
+.env
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Jupyter checkpoints (nếu có dùng notebook)
+.ipynb_checkpoints/
+
+# IDE
+.idea/
+
+# FAISS index / vector store (nếu file nặng, build lại lúc chạy thay vì lưu trên GitHub)
+*.faiss
+*.index
+*.pkl
+
+# OS system files
+.DS_Store
+Thumbs.db
