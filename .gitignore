@@ -23,3 +23,7 @@ __pycache__/
 # OS system files
 .DS_Store
 Thumbs.db
+
+data/qdrant_db/
+data/processed/
+data/chat_memory.db*
