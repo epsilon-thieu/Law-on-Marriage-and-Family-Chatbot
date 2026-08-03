@@ -21,14 +21,22 @@ if "GOOGLE_API_KEY" in st.secrets:
     os.environ["GOOGLE_API_KEY"] = st.secrets["GOOGLE_API_KEY"]
 
 # ============================================================
-# Giao diện (CSS) — bảng màu tương phản cao, bố cục nổi bật
+# Giao diện (CSS)
+# Lưu ý: nếu trình duyệt/hệ điều hành người dùng bật dark mode,
+# Streamlit có thể tự chuyển sang theme tối và để lại màu chữ mặc
+# định (trắng/nhạt) đè lên các khối nền sáng do ta tự vẽ, khiến
+# chữ "biến mất". Toàn bộ các khối dưới đây ép color-scheme: light
+# và gán màu chữ !important cho MỌI phần tử con để tránh bị đè.
 # ============================================================
 st.markdown(
     """
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:wght@600;700&display=swap');
 
-    html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
+    html, body, [class*="css"] {
+        font-family: 'Inter', sans-serif;
+        color-scheme: light;
+    }
 
     :root {
         --ink:        #0f172a;
@@ -92,7 +100,7 @@ st.markdown(
         margin: 18px 0 8px 2px;
         font-weight: 700;
     }
-    .conv-active-tag {
+    .conv-active-tag, .conv-active-tag * {
         display: inline-block;
         background: var(--amber);
         color: #1e1300 !important;
@@ -135,15 +143,15 @@ st.markdown(
         flex-shrink: 0;
         box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
+    .main-header h1, .main-header h1 * { color: #ffffff !important; }
     .main-header h1 {
         font-family: 'Lora', serif;
-        color: #ffffff;
         font-size: 24px;
         margin: 0;
         line-height: 1.3;
     }
+    .main-header p, .main-header p * { color: #e4e1ff !important; }
     .main-header p {
-        color: #d8d4fb;
         font-size: 13.5px;
         margin: 4px 0 0 0;
         font-weight: 500;
@@ -155,22 +163,45 @@ st.markdown(
         line-height: 1.7;
         font-size: 15.5px;
     }
+    .user-bubble, .user-bubble * {
+        color: #ffffff !important;
+    }
     .user-bubble {
         background: var(--indigo);
-        color: #ffffff;
         border-radius: 18px 18px 4px 18px;
         box-shadow: 0 3px 10px rgba(67,56,202,0.25);
     }
+    .assistant-bubble, .assistant-bubble * {
+        color: var(--ink) !important;
+    }
     .assistant-bubble {
         background: var(--card);
-        color: var(--ink);
         border: 1px solid var(--border);
         border-left: 5px solid var(--amber);
         border-radius: 4px 18px 18px 18px;
         box-shadow: 0 3px 10px rgba(15,23,42,0.06);
     }
 
-    /* ---------- Thẻ trích dẫn pháp lý ---------- */
+    /* ---------- Hộp mở rộng (expander) chứa trích dẫn ---------- */
+    div[data-testid="stExpander"] {
+        background: var(--card) !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 12px !important;
+    }
+    div[data-testid="stExpander"] summary,
+    div[data-testid="stExpander"] summary * {
+        color: var(--ink) !important;
+        font-weight: 600 !important;
+    }
+    div[data-testid="stExpander"] div[data-testid="stExpanderDetails"],
+    div[data-testid="stExpander"] div[data-testid="stExpanderDetails"] * {
+        color: var(--ink) !important;
+    }
+
+    /* ---------- Thẻ trích dẫn pháp lý (đặt sau expander để không bị đè) ---------- */
+    .citation-card, .citation-card * {
+        color: #78350f !important;
+    }
     .citation-card {
         background: #fffbeb;
         border: 1px solid #fde68a;
@@ -179,35 +210,43 @@ st.markdown(
         padding: 10px 14px;
         margin-bottom: 8px;
         font-size: 13.5px;
-        color: #78350f;
     }
-    .citation-index {
+    .citation-index, .citation-index * {
         display: inline-block;
         background: var(--amber);
-        color: #1a1100;
+        color: #1a1100 !important;
         font-weight: 800;
         border-radius: 6px;
         padding: 1px 9px;
         margin-right: 9px;
         font-size: 12px;
     }
-    .citation-meta { color: #78350f; font-weight: 500; }
+    .citation-meta, .citation-meta * { font-weight: 500; }
 
     /* ---------- Ô nhập câu hỏi ---------- */
     div[data-testid="stChatInput"] textarea {
         border-radius: 14px !important;
         border: 1.5px solid var(--border) !important;
+        color: var(--ink) !important;
     }
     div[data-testid="stChatInput"] {
         box-shadow: 0 6px 18px rgba(15,23,42,0.08);
         border-radius: 16px;
     }
 
-    /* ---------- Empty state / gợi ý câu hỏi ---------- */
-    .empty-hero {
-        text-align: center;
-        padding: 40px 20px 16px 20px;
+    /* ---------- Trạng thái đang tải / spinner ---------- */
+    div[data-testid="stSpinner"],
+    div[data-testid="stSpinner"] * {
+        color: var(--ink) !important;
+        font-weight: 500;
     }
+    div[data-testid="stStatusWidget"],
+    div[data-testid="stStatusWidget"] * {
+        color: var(--ink) !important;
+    }
+
+    /* ---------- Empty state / gợi ý câu hỏi ---------- */
+    .empty-hero { text-align: center; padding: 40px 20px 16px 20px; }
     .empty-hero .glyph {
         font-size: 46px;
         display: inline-block;
@@ -215,19 +254,24 @@ st.markdown(
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
+    .empty-hero h2, .empty-hero h2 * { color: var(--ink) !important; }
     .empty-hero h2 {
         font-family: 'Lora', serif;
-        color: var(--ink);
         margin: 10px 0 4px 0;
         font-size: 22px;
     }
-    .empty-hero p { color: var(--ink-soft); font-size: 14.5px; }
+    .empty-hero p, .empty-hero p * { color: var(--ink-soft) !important; }
+    .empty-hero p { font-size: 14.5px; }
 
+    div.suggestion-btn button,
+    div.suggestion-btn button *,
+    div.suggestion-btn button p {
+        color: var(--ink) !important;
+    }
     div.suggestion-btn button {
         background: var(--card) !important;
         border: 1.5px solid var(--border) !important;
         border-radius: 14px !important;
-        color: var(--ink) !important;
         text-align: left !important;
         padding: 14px 16px !important;
         font-size: 14px !important;
@@ -243,13 +287,19 @@ st.markdown(
         box-shadow: 0 6px 16px rgba(67,56,202,0.15);
     }
 
+    .disclaimer-bar, .disclaimer-bar * { color: var(--ink-soft) !important; }
     .disclaimer-bar {
         text-align: center;
-        color: var(--ink-soft);
         font-size: 12px;
         padding: 14px 0 4px 0;
         border-top: 1px solid var(--border);
         margin-top: 10px;
+    }
+
+    /* ---------- Caption "N đoạn chat" trong nội dung chính (nếu có) ---------- */
+    .stApp [data-testid="stCaptionContainer"],
+    .stApp [data-testid="stCaptionContainer"] * {
+        color: var(--ink-soft) !important;
     }
     </style>
     """,
