@@ -17,6 +17,7 @@ from processing.legal_splitter import (
 
 CONFIG_PATH = Path(__file__).parent / "config" / "documents.yaml"
 OUTPUT_PATH = Path(__file__).parent / "data" / "processed" / "all_chunks.jsonl"
+PROJECT_ROOT = Path(__file__).parent
 
 
 def load_documents_config() -> list[dict]:
@@ -27,8 +28,9 @@ def load_documents_config() -> list[dict]:
 def process_one_document(doc_cfg: dict) -> list:
     skip_texts = set(doc_cfg.get("skip_texts", []))
     stop_patterns = doc_cfg.get("stop_at_patterns", [])
+    doc_path = PROJECT_ROOT / doc_cfg["path"]  # <-- thêm dòng này
 
-    elements = extract_docx_paragraphs(doc_cfg["path"], skip_texts=skip_texts)
+    elements = extract_docx_paragraphs(str(doc_path), skip_texts=skip_texts)
     chunks = split_docx_legal(
         elements,
         source_name=doc_cfg["source_name"],

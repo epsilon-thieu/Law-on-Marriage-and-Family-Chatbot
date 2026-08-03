@@ -1,0 +1,12 @@
+langchain_core==1.5.3
+langgraph==1.2.10
+protobuf==7.35.1
+python-dotenv==1.2.2
+python_docx==1.2.0
+pyvi==0.1.1
+PyYAML==6.0.3
+qdrant_client==1.18.0
+rank_bm25==0.2.2
+sentence_transformers==5.6.1
+langgraph-checkpoint-sqlite ==3.1.0
+google-genai==2.14.0

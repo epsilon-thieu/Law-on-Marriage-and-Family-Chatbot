@@ -36,7 +36,7 @@ from sentence_transformers import SentenceTransformer
 
 # ----- Cấu hình (khớp với 2 file indexing) -----
 MODEL_NAME = "intfloat/multilingual-e5-base"
-COLLECTION_NAME = "traffic_law"
+COLLECTION_NAME = "matrimonial_law"
 
 DENSE_TOP_K = 20
 SPARSE_TOP_K = 20
