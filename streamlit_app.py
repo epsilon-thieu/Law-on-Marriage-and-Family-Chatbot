@@ -21,195 +21,235 @@ if "GOOGLE_API_KEY" in st.secrets:
     os.environ["GOOGLE_API_KEY"] = st.secrets["GOOGLE_API_KEY"]
 
 # ============================================================
-# Giao diện (CSS)
+# Giao diện (CSS) — bảng màu tương phản cao, bố cục nổi bật
 # ============================================================
 st.markdown(
     """
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:wght@600;700&display=swap');
 
     html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
 
     :root {
-        --navy: #17233b;
-        --navy-light: #24344f;
-        --gold: #c9a15a;
-        --gold-light: #e7cd94;
-        --paper: #f7f5ef;
-        --ink: #1c2530;
+        --ink:        #0f172a;
+        --ink-soft:   #475569;
+        --indigo:     #4338ca;
+        --indigo-dk:  #312e81;
+        --amber:      #f59e0b;
+        --amber-dk:   #b45309;
+        --bg:         #eef1f8;
+        --card:       #ffffff;
+        --border:     #e2e6f0;
     }
 
-    .stApp { background: var(--paper); }
+    .stApp {
+        background:
+            radial-gradient(circle at 8% 0%, rgba(67,56,202,0.10), transparent 45%),
+            radial-gradient(circle at 95% 15%, rgba(245,158,11,0.12), transparent 40%),
+            var(--bg);
+    }
 
-    /* ---------- Ẩn footer/menu mặc định ---------- */
     #MainMenu, footer { visibility: hidden; }
 
     /* ---------- Sidebar ---------- */
     section[data-testid="stSidebar"] {
-        background: linear-gradient(180deg, var(--navy) 0%, #10192a 100%);
-        border-right: 1px solid #0b1220;
+        background: #0f172a;
+        border-right: 1px solid #1e293b;
     }
-    section[data-testid="stSidebar"] * { color: #eef1f6 !important; }
+    section[data-testid="stSidebar"] * { color: #f1f5f9 !important; }
     section[data-testid="stSidebar"] .stButton button {
-        background: rgba(255,255,255,0.04);
-        border: 1px solid rgba(255,255,255,0.10);
+        background: #1e293b;
+        border: 1px solid #334155;
         border-radius: 10px;
         text-align: left;
         font-size: 14px;
-        padding: 9px 12px;
+        font-weight: 500;
+        padding: 10px 13px;
         transition: all .15s ease;
     }
     section[data-testid="stSidebar"] .stButton button:hover {
-        background: rgba(201,161,90,0.18);
-        border-color: var(--gold);
-        color: #fff !important;
+        background: #334155;
+        border-color: var(--amber);
     }
     .sidebar-brand {
         font-family: 'Lora', serif;
-        font-size: 21px;
+        font-size: 22px;
         font-weight: 700;
-        color: #fff !important;
-        letter-spacing: .2px;
+        color: #ffffff !important;
+        display: flex; align-items: center; gap: 8px;
         margin-bottom: 2px;
     }
     .sidebar-sub {
-        font-size: 12px;
-        color: #9aa7bd !important;
-        margin-bottom: 14px;
+        font-size: 12.5px;
+        color: #94a3b8 !important;
+        margin-bottom: 16px;
     }
     .sidebar-section-label {
         font-size: 11px;
         text-transform: uppercase;
-        letter-spacing: .08em;
-        color: #7d8aa1 !important;
-        margin: 14px 0 6px 4px;
-        font-weight: 600;
+        letter-spacing: .09em;
+        color: #64748b !important;
+        margin: 18px 0 8px 2px;
+        font-weight: 700;
+    }
+    .conv-active-tag {
+        display: inline-block;
+        background: var(--amber);
+        color: #1e1300 !important;
+        font-size: 10px;
+        font-weight: 700;
+        padding: 1px 7px;
+        border-radius: 20px;
+        margin-bottom: 6px;
     }
 
-    /* Nút "Đoạn chat mới" nổi bật */
+    /* Nút "Đoạn chat mới" nổi bật rõ */
     div[data-testid="stSidebar"] div[data-testid="stButton"]:first-of-type button {
-        background: linear-gradient(135deg, var(--gold) 0%, #b8874a 100%) !important;
-        color: var(--navy) !important;
-        font-weight: 600 !important;
+        background: linear-gradient(135deg, var(--amber) 0%, var(--amber-dk) 100%) !important;
+        color: #1a1100 !important;
+        font-weight: 700 !important;
         border: none !important;
+        box-shadow: 0 4px 14px rgba(245,158,11,0.35);
     }
     div[data-testid="stSidebar"] div[data-testid="stButton"]:first-of-type button:hover {
-        filter: brightness(1.08);
+        filter: brightness(1.07);
     }
 
-    /* ---------- Header chính ---------- */
+    /* ---------- Header chính (hero) ---------- */
     .main-header {
         display: flex;
         align-items: center;
-        gap: 14px;
-        padding: 18px 22px;
-        background: var(--navy);
-        border-radius: 16px;
-        margin-bottom: 18px;
-        box-shadow: 0 4px 18px rgba(23,35,59,0.18);
+        gap: 18px;
+        padding: 26px 28px;
+        background: linear-gradient(120deg, var(--indigo) 0%, var(--indigo-dk) 100%);
+        border-radius: 20px;
+        margin-bottom: 22px;
+        box-shadow: 0 10px 30px rgba(49,46,129,0.28);
     }
     .main-header .icon-badge {
-        width: 46px; height: 46px;
-        border-radius: 12px;
-        background: linear-gradient(135deg, var(--gold), #b8874a);
+        width: 56px; height: 56px;
+        border-radius: 16px;
+        background: var(--amber);
         display: flex; align-items: center; justify-content: center;
-        font-size: 22px;
+        font-size: 26px;
         flex-shrink: 0;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
     .main-header h1 {
         font-family: 'Lora', serif;
-        color: #fff;
-        font-size: 21px;
+        color: #ffffff;
+        font-size: 24px;
         margin: 0;
-        line-height: 1.25;
+        line-height: 1.3;
     }
     .main-header p {
-        color: #b9c2d4;
-        font-size: 13px;
-        margin: 2px 0 0 0;
+        color: #d8d4fb;
+        font-size: 13.5px;
+        margin: 4px 0 0 0;
+        font-weight: 500;
     }
 
     /* ---------- Bong bóng chat ---------- */
     .chat-bubble {
-        padding: 13px 17px;
-        line-height: 1.65;
-        font-size: 15px;
+        padding: 14px 18px;
+        line-height: 1.7;
+        font-size: 15.5px;
     }
     .user-bubble {
-        background: linear-gradient(135deg, var(--navy), var(--navy-light));
-        color: #fff;
-        border-radius: 16px 16px 4px 16px;
+        background: var(--indigo);
+        color: #ffffff;
+        border-radius: 18px 18px 4px 18px;
+        box-shadow: 0 3px 10px rgba(67,56,202,0.25);
     }
     .assistant-bubble {
-        background: #ffffff;
+        background: var(--card);
         color: var(--ink);
-        border: 1px solid #e9e4d6;
-        border-left: 4px solid var(--gold);
-        border-radius: 4px 16px 16px 16px;
+        border: 1px solid var(--border);
+        border-left: 5px solid var(--amber);
+        border-radius: 4px 18px 18px 18px;
+        box-shadow: 0 3px 10px rgba(15,23,42,0.06);
     }
 
     /* ---------- Thẻ trích dẫn pháp lý ---------- */
     .citation-card {
-        background: #fbf8f0;
-        border: 1px solid #ecdfc0;
-        border-left: 3px solid var(--gold);
-        border-radius: 8px;
-        padding: 9px 13px;
+        background: #fffbeb;
+        border: 1px solid #fde68a;
+        border-left: 4px solid var(--amber);
+        border-radius: 10px;
+        padding: 10px 14px;
         margin-bottom: 8px;
         font-size: 13.5px;
-        color: #3c3122;
+        color: #78350f;
     }
     .citation-index {
         display: inline-block;
-        background: var(--gold);
-        color: var(--navy);
-        font-weight: 700;
+        background: var(--amber);
+        color: #1a1100;
+        font-weight: 800;
         border-radius: 6px;
-        padding: 1px 8px;
-        margin-right: 8px;
+        padding: 1px 9px;
+        margin-right: 9px;
         font-size: 12px;
     }
-    .citation-meta { color: #6b6552; }
+    .citation-meta { color: #78350f; font-weight: 500; }
 
     /* ---------- Ô nhập câu hỏi ---------- */
     div[data-testid="stChatInput"] textarea {
         border-radius: 14px !important;
+        border: 1.5px solid var(--border) !important;
+    }
+    div[data-testid="stChatInput"] {
+        box-shadow: 0 6px 18px rgba(15,23,42,0.08);
+        border-radius: 16px;
     }
 
     /* ---------- Empty state / gợi ý câu hỏi ---------- */
     .empty-hero {
         text-align: center;
-        padding: 46px 20px 10px 20px;
+        padding: 40px 20px 16px 20px;
     }
-    .empty-hero .glyph { font-size: 42px; }
+    .empty-hero .glyph {
+        font-size: 46px;
+        display: inline-block;
+        background: linear-gradient(135deg, var(--indigo), var(--amber));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
     .empty-hero h2 {
         font-family: 'Lora', serif;
-        color: var(--navy);
-        margin: 8px 0 4px 0;
-    }
-    .empty-hero p { color: #6d7688; font-size: 14.5px; }
-
-    div[data-testid="stVerticalBlock"] div.suggestion-btn button {
-        background: #fff;
-        border: 1px solid #e3ddce;
-        border-radius: 12px;
         color: var(--ink);
-        text-align: left;
-        padding: 12px 14px;
-        font-size: 13.5px;
+        margin: 10px 0 4px 0;
+        font-size: 22px;
+    }
+    .empty-hero p { color: var(--ink-soft); font-size: 14.5px; }
+
+    div.suggestion-btn button {
+        background: var(--card) !important;
+        border: 1.5px solid var(--border) !important;
+        border-radius: 14px !important;
+        color: var(--ink) !important;
+        text-align: left !important;
+        padding: 14px 16px !important;
+        font-size: 14px !important;
+        font-weight: 500 !important;
         width: 100%;
+        box-shadow: 0 2px 8px rgba(15,23,42,0.05);
         transition: all .15s ease;
     }
     div.suggestion-btn button:hover {
-        border-color: var(--gold);
-        background: #fdf9ef;
+        border-color: var(--indigo) !important;
+        background: #f5f3ff !important;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(67,56,202,0.15);
     }
 
     .disclaimer-bar {
         text-align: center;
-        color: #8a8f9a;
-        font-size: 11.5px;
-        padding: 10px 0 4px 0;
+        color: var(--ink-soft);
+        font-size: 12px;
+        padding: 14px 0 4px 0;
+        border-top: 1px solid var(--border);
+        margin-top: 10px;
     }
     </style>
     """,
@@ -266,10 +306,10 @@ if not st.session_state.conversations:
     new_conversation()
 
 EXAMPLE_QUESTIONS = [
-    "Điều kiện để kết hôn hợp pháp tại Việt Nam là gì?",
-    "Thủ tục ly hôn thuận tình cần những giấy tờ gì?",
-    "Tài sản chung và tài sản riêng trong hôn nhân được xác định thế nào?",
-    "Quyền nuôi con sau khi ly hôn được quy định ra sao?",
+    ("💍", "Điều kiện để kết hôn hợp pháp tại Việt Nam là gì?"),
+    ("📄", "Thủ tục ly hôn thuận tình cần những giấy tờ gì?"),
+    ("🏠", "Tài sản chung và tài sản riêng trong hôn nhân được xác định thế nào?"),
+    ("👨‍👩‍👧", "Quyền nuôi con sau khi ly hôn được quy định ra sao?"),
 ]
 
 # ============================================================
@@ -296,10 +336,11 @@ with st.sidebar:
 
     for conv_id, conv in sorted_convs:
         is_current = conv_id == st.session_state.current_conv_id
-        label = ("🟢  " if is_current else "💬  ") + conv["title"]
+        if is_current:
+            st.markdown('<span class="conv-active-tag">ĐANG MỞ</span>', unsafe_allow_html=True)
         col_main, col_del = st.columns([5, 1])
         with col_main:
-            if st.button(label, key=f"conv_{conv_id}", use_container_width=True):
+            if st.button(conv["title"], key=f"conv_{conv_id}", use_container_width=True):
                 st.session_state.current_conv_id = conv_id
                 st.rerun()
         with col_del:
@@ -357,16 +398,16 @@ if not has_messages:
         <div class="empty-hero">
             <div class="glyph">📜</div>
             <h2>Bắt đầu một câu hỏi mới</h2>
-            <p>Ví dụ về những gì bạn có thể hỏi:</p>
+            <p>Chọn một câu hỏi mẫu bên dưới, hoặc gõ câu hỏi của riêng bạn</p>
         </div>
         """,
         unsafe_allow_html=True,
     )
     cols = st.columns(2)
-    for i, q in enumerate(EXAMPLE_QUESTIONS):
+    for i, (icon, q) in enumerate(EXAMPLE_QUESTIONS):
         with cols[i % 2]:
             st.markdown('<div class="suggestion-btn">', unsafe_allow_html=True)
-            if st.button(q, key=f"suggestion_{i}", use_container_width=True):
+            if st.button(f"{icon}  {q}", key=f"suggestion_{i}", use_container_width=True):
                 st.session_state.pending_question = q
             st.markdown("</div>", unsafe_allow_html=True)
 
