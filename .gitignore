@@ -9,13 +9,13 @@ __pycache__/
 *.pyc
 *.pyo
 
-# Jupyter checkpoints (nếu có dùng notebook)
+# Jupyter checkpoints
 .ipynb_checkpoints/
 
 # IDE
 .idea/
 
-# FAISS index / vector store (nếu file nặng, build lại lúc chạy thay vì lưu trên GitHub)
+# FAISS index / vector store
 *.faiss
 *.index
 *.pkl
@@ -24,6 +24,7 @@ __pycache__/
 .DS_Store
 Thumbs.db
 
-data/qdrant_db/
-data/processed/
-data/chat_memory.db*
+#data
+#data/qdrant_db/
+#data/processed/
+#data/chat_memory.db*
