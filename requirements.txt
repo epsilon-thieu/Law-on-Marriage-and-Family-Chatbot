@@ -10,3 +10,4 @@ rank_bm25==0.2.2
 sentence_transformers==5.6.1
 langgraph-checkpoint-sqlite==3.1.0
 google-genai==2.14.0
+streamlit==1.60.0
