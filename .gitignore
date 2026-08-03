@@ -19,6 +19,7 @@ __pycache__/
 *.faiss
 *.index
 *.pkl
+!data/bm25_cache.pkl
 
 # OS system files
 .DS_Store
