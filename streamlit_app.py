@@ -22,21 +22,30 @@ if "GOOGLE_API_KEY" in st.secrets:
 
 # ============================================================
 # Giao diện (CSS)
-# Lưu ý: nếu trình duyệt/hệ điều hành người dùng bật dark mode,
-# Streamlit có thể tự chuyển sang theme tối và để lại màu chữ mặc
-# định (trắng/nhạt) đè lên các khối nền sáng do ta tự vẽ, khiến
-# chữ "biến mất". Toàn bộ các khối dưới đây ép color-scheme: light
-# và gán màu chữ !important cho MỌI phần tử con để tránh bị đè.
 # ============================================================
 st.markdown(
     """
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:wght@600;700&display=swap');
 
-    html, body, [class*="css"] {
-        font-family: 'Inter', sans-serif;
-        color-scheme: light;
+    /* ------------------------------------------------------
+       QUAN TRỌNG: Streamlit dùng các biến CSS này (--text-color,
+       --background-color, --secondary-background-color) cho MỌI
+       widget mặc định (nút bấm, ô nhập, expander, spinner...).
+       Nếu trình duyệt/hệ điều hành người dùng bật dark mode,
+       Streamlit tự đổi các biến này sang tối, khiến chữ tối trên
+       nền tối do ta tự vẽ -> chữ "biến mất". Ép các biến này về
+       sáng ngay từ đầu để mọi widget mặc định luôn tương phản tốt.
+       ------------------------------------------------------ */
+    :root, .stApp {
+        --background-color: #eef1f8 !important;
+        --secondary-background-color: #ffffff !important;
+        --text-color: #0f172a !important;
+        --primary-color: #4338ca !important;
+        color-scheme: light !important;
     }
+
+    html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
 
     :root {
         --ink:        #0f172a;
@@ -45,6 +54,8 @@ st.markdown(
         --indigo-dk:  #312e81;
         --amber:      #f59e0b;
         --amber-dk:   #b45309;
+        --green:      #16a34a;
+        --green-dk:   #15803d;
         --bg:         #eef1f8;
         --card:       #ffffff;
         --border:     #e2e6f0;
@@ -100,16 +111,6 @@ st.markdown(
         margin: 18px 0 8px 2px;
         font-weight: 700;
     }
-    .conv-active-tag, .conv-active-tag * {
-        display: inline-block;
-        background: var(--amber);
-        color: #1e1300 !important;
-        font-size: 10px;
-        font-weight: 700;
-        padding: 1px 7px;
-        border-radius: 20px;
-        margin-bottom: 6px;
-    }
 
     /* Nút "Đoạn chat mới" nổi bật rõ */
     div[data-testid="stSidebar"] div[data-testid="stButton"]:first-of-type button {
@@ -121,6 +122,18 @@ st.markdown(
     }
     div[data-testid="stSidebar"] div[data-testid="stButton"]:first-of-type button:hover {
         filter: brightness(1.07);
+    }
+
+    /* ---------- Cuộc trò chuyện đang mở: highlight XANH LÁ ---------- */
+    div[class*="st-key-conv_current"] button {
+        background: linear-gradient(135deg, var(--green) 0%, var(--green-dk) 100%) !important;
+        border: 1px solid var(--green-dk) !important;
+        color: #ffffff !important;
+        font-weight: 700 !important;
+        box-shadow: 0 3px 10px rgba(22,163,74,0.35);
+    }
+    div[class*="st-key-conv_current"] button:hover {
+        filter: brightness(1.08);
     }
 
     /* ---------- Header chính (hero) ---------- */
@@ -158,22 +171,14 @@ st.markdown(
     }
 
     /* ---------- Bong bóng chat ---------- */
-    .chat-bubble {
-        padding: 14px 18px;
-        line-height: 1.7;
-        font-size: 15.5px;
-    }
-    .user-bubble, .user-bubble * {
-        color: #ffffff !important;
-    }
+    .chat-bubble { padding: 14px 18px; line-height: 1.7; font-size: 15.5px; }
+    .user-bubble, .user-bubble * { color: #ffffff !important; }
     .user-bubble {
         background: var(--indigo);
         border-radius: 18px 18px 4px 18px;
         box-shadow: 0 3px 10px rgba(67,56,202,0.25);
     }
-    .assistant-bubble, .assistant-bubble * {
-        color: var(--ink) !important;
-    }
+    .assistant-bubble, .assistant-bubble * { color: var(--ink) !important; }
     .assistant-bubble {
         background: var(--card);
         border: 1px solid var(--border);
@@ -183,27 +188,34 @@ st.markdown(
     }
 
     /* ---------- Hộp mở rộng (expander) chứa trích dẫn ---------- */
-    div[data-testid="stExpander"] {
+    div[data-testid="stExpander"],
+    div[data-testid="stExpander"] details,
+    div[data-testid="stExpander"] summary {
         background: var(--card) !important;
+    }
+    div[data-testid="stExpander"] {
         border: 1px solid var(--border) !important;
         border-radius: 12px !important;
+        overflow: hidden;
     }
     div[data-testid="stExpander"] summary,
-    div[data-testid="stExpander"] summary * {
+    div[data-testid="stExpander"] summary *,
+    div[data-testid="stExpander"] summary span,
+    div[data-testid="stExpander"] summary p {
         color: var(--ink) !important;
         font-weight: 600 !important;
     }
-    div[data-testid="stExpander"] div[data-testid="stExpanderDetails"],
-    div[data-testid="stExpander"] div[data-testid="stExpanderDetails"] * {
+    div[data-testid="stExpander"] svg { fill: var(--ink) !important; }
+    div[data-testid="stExpanderDetails"],
+    div[data-testid="stExpanderDetails"] * {
         color: var(--ink) !important;
+        background: var(--card) !important;
     }
 
-    /* ---------- Thẻ trích dẫn pháp lý (đặt sau expander để không bị đè) ---------- */
-    .citation-card, .citation-card * {
-        color: #78350f !important;
-    }
+    /* ---------- Thẻ trích dẫn pháp lý ---------- */
+    .citation-card, .citation-card * { color: #78350f !important; }
     .citation-card {
-        background: #fffbeb;
+        background: #fffbeb !important;
         border: 1px solid #fde68a;
         border-left: 4px solid var(--amber);
         border-radius: 10px;
@@ -213,7 +225,7 @@ st.markdown(
     }
     .citation-index, .citation-index * {
         display: inline-block;
-        background: var(--amber);
+        background: var(--amber) !important;
         color: #1a1100 !important;
         font-weight: 800;
         border-radius: 6px;
@@ -224,25 +236,23 @@ st.markdown(
     .citation-meta, .citation-meta * { font-weight: 500; }
 
     /* ---------- Ô nhập câu hỏi ---------- */
+    div[data-testid="stChatInput"] {
+        background: var(--card) !important;
+        border-radius: 16px !important;
+        box-shadow: 0 6px 18px rgba(15,23,42,0.08);
+    }
     div[data-testid="stChatInput"] textarea {
+        background: var(--card) !important;
+        color: var(--ink) !important;
         border-radius: 14px !important;
         border: 1.5px solid var(--border) !important;
-        color: var(--ink) !important;
     }
-    div[data-testid="stChatInput"] {
-        box-shadow: 0 6px 18px rgba(15,23,42,0.08);
-        border-radius: 16px;
-    }
+    div[data-testid="stChatInput"] textarea::placeholder { color: #94a3b8 !important; }
 
     /* ---------- Trạng thái đang tải / spinner ---------- */
-    div[data-testid="stSpinner"],
-    div[data-testid="stSpinner"] * {
+    div[data-testid="stSpinner"], div[data-testid="stSpinner"] * {
         color: var(--ink) !important;
         font-weight: 500;
-    }
-    div[data-testid="stStatusWidget"],
-    div[data-testid="stStatusWidget"] * {
-        color: var(--ink) !important;
     }
 
     /* ---------- Empty state / gợi ý câu hỏi ---------- */
@@ -255,36 +265,38 @@ st.markdown(
         -webkit-text-fill-color: transparent;
     }
     .empty-hero h2, .empty-hero h2 * { color: var(--ink) !important; }
-    .empty-hero h2 {
-        font-family: 'Lora', serif;
-        margin: 10px 0 4px 0;
-        font-size: 22px;
-    }
+    .empty-hero h2 { font-family: 'Lora', serif; margin: 10px 0 4px 0; font-size: 22px; }
     .empty-hero p, .empty-hero p * { color: var(--ink-soft) !important; }
     .empty-hero p { font-size: 14.5px; }
 
-    div.suggestion-btn button,
-    div.suggestion-btn button *,
-    div.suggestion-btn button p {
+    /* ---------- Nút câu hỏi gợi ý (targeted qua st.container(key=...)) ---------- */
+    div[class*="st-key-suggestion_"] { position: relative; z-index: 1; }
+    div[class*="st-key-suggestion_"] button {
+        background: #ffffff !important;
         color: var(--ink) !important;
-    }
-    div.suggestion-btn button {
-        background: var(--card) !important;
         border: 1.5px solid var(--border) !important;
         border-radius: 14px !important;
         text-align: left !important;
-        padding: 14px 16px !important;
-        font-size: 14px !important;
+        padding: 16px 18px !important;
+        font-size: 14.5px !important;
         font-weight: 500 !important;
         width: 100%;
         box-shadow: 0 2px 8px rgba(15,23,42,0.05);
-        transition: all .15s ease;
+        transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background-color .18s ease;
     }
-    div.suggestion-btn button:hover {
+    div[class*="st-key-suggestion_"] button:hover,
+    div[class*="st-key-suggestion_"] button:focus {
         border-color: var(--indigo) !important;
-        background: #f5f3ff !important;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(67,56,202,0.15);
+        background-color: #f5f3ff !important;
+        color: var(--indigo-dk) !important;
+        transform: scale(1.045);
+        box-shadow: 0 12px 26px rgba(67,56,202,0.22);
+        z-index: 5;
+        position: relative;
+    }
+    div[class*="st-key-suggestion_"] button:active {
+        color: var(--indigo-dk) !important;
+        background-color: #f5f3ff !important;
     }
 
     .disclaimer-bar, .disclaimer-bar * { color: var(--ink-soft) !important; }
@@ -294,12 +306,6 @@ st.markdown(
         padding: 14px 0 4px 0;
         border-top: 1px solid var(--border);
         margin-top: 10px;
-    }
-
-    /* ---------- Caption "N đoạn chat" trong nội dung chính (nếu có) ---------- */
-    .stApp [data-testid="stCaptionContainer"],
-    .stApp [data-testid="stCaptionContainer"] * {
-        color: var(--ink-soft) !important;
     }
     </style>
     """,
@@ -386,17 +392,20 @@ with st.sidebar:
 
     for conv_id, conv in sorted_convs:
         is_current = conv_id == st.session_state.current_conv_id
-        if is_current:
-            st.markdown('<span class="conv-active-tag">ĐANG MỞ</span>', unsafe_allow_html=True)
-        col_main, col_del = st.columns([5, 1])
-        with col_main:
-            if st.button(conv["title"], key=f"conv_{conv_id}", use_container_width=True):
-                st.session_state.current_conv_id = conv_id
-                st.rerun()
-        with col_del:
-            if st.button("🗑️", key=f"del_{conv_id}", help="Xóa đoạn chat này"):
-                delete_conversation(conv_id)
-                st.rerun()
+        # "conv_current" chỉ dùng cho ĐÚNG MỘT hội thoại tại một thời điểm
+        # -> an toàn để dùng làm key cố định, CSS bên trên sẽ tô xanh lá.
+        row_key = "conv_current" if is_current else f"conv_row_{conv_id}"
+        label = ("✅  " if is_current else "💬  ") + conv["title"]
+        with st.container(key=row_key):
+            col_main, col_del = st.columns([5, 1])
+            with col_main:
+                if st.button(label, key=f"conv_{conv_id}", use_container_width=True):
+                    st.session_state.current_conv_id = conv_id
+                    st.rerun()
+            with col_del:
+                if st.button("🗑️", key=f"del_{conv_id}", help="Xóa đoạn chat này"):
+                    delete_conversation(conv_id)
+                    st.rerun()
 
     st.markdown("<br>", unsafe_allow_html=True)
     st.caption(f"{len(st.session_state.conversations)} đoạn chat")
@@ -456,10 +465,9 @@ if not has_messages:
     cols = st.columns(2)
     for i, (icon, q) in enumerate(EXAMPLE_QUESTIONS):
         with cols[i % 2]:
-            st.markdown('<div class="suggestion-btn">', unsafe_allow_html=True)
-            if st.button(f"{icon}  {q}", key=f"suggestion_{i}", use_container_width=True):
-                st.session_state.pending_question = q
-            st.markdown("</div>", unsafe_allow_html=True)
+            with st.container(key=f"suggestion_{i}"):
+                if st.button(f"{icon}  {q}", key=f"suggestion_btn_{i}", use_container_width=True):
+                    st.session_state.pending_question = q
 
 for msg in current_conv["messages"]:
     role = msg["role"]
